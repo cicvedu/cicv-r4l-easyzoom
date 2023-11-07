@@ -55,3 +55,16 @@ Kbuild的obj-m := r4l_e1000_demo.o
 
 <img src="./image/task2/7.png" width="600">
 
+## 作业三：
+
+添加rust_helloworld.rs并修改Makefile和Kconfig，编译内核架构
+
+<img src="./image/task3/1.png" width="600">
+
+编译rust_helloworld.ko模块
+
+<img src="./image/task3/2.png" width="600">
+
+加载rust_helloworld.ko模块
+
+<img src="./image/task3/3.png" width="600">
