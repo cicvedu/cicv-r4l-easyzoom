@@ -68,3 +68,25 @@ Kbuild的obj-m := r4l_e1000_demo.o
 加载rust_helloworld.ko模块
 
 <img src="./image/task3/3.png" width="600">
+
+## 作业四
+
+## 作业五
+
+修改配置
+
+<img src="./image/task5/1.png" width="600">
+
+编编译内核
+
+<img src="./image/task5/2.png" width="600">
+
+往字符设备写入和读出内容
+
+<img src="./image/task5/3.png" width="600">
+
+### 问题解答:
+
+作业5中的字符设备/dev/cicv是怎么创建的？它的设备号是多少？它是如何与我们写的字符设备驱动关联上的？
+
+在src_e1000目录里的build_image.sh， echo "mknod /dev/cicv c 248 0" >> etc/init.d/rcS；通过启动脚本/etc/init.d/rcS初始化任务，随后通过mknod /dev/节点名称 c 主设备号 次设备号方式创建设备节点，所以/dev/cicv的主设备号是248，次设备号是0；通过设备号248进行关联的
