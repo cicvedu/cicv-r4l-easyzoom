@@ -71,6 +71,51 @@ Kbuild的obj-m := r4l_e1000_demo.o
 
 ## 作业四
 
+qemu模拟器中加载r4l_e1000_demo.ko并ping 10.0.2.2网络
+
+<img src="./image/task4/1.png" width="600">
+
+卸载r4l_e1000_demo模块并重新装载r4l_e1000_demo模块
+
+<img src="./image/task4/2.png" width="600">
+
+重新ping 10.0.2.2网络
+
+<img src="./image/task4/3.png" width="600">
+
+代码部分：
+
+```
+    fn stop(_dev: &net::Device, _data: &NetDevicePrvData) -> Result {
+        pr_info!("Rust for linux e1000 driver demo (net device stop)\n");
+        
+        Self::e1000_free_all_tx_resources(_data);
+        Self::e1000_free_all_rx_resources(_dev, _data);
+
+        let raw_ptr = _data._irq_handler.load(core::sync::atomic::Ordering::Relaxed);
+        if !raw_ptr.is_null() {
+            let boxed_reg = unsafe {Box::from_raw(raw_ptr as *mut kernel::irq::Registration<E1000InterruptHandler>)};
+        }
+        _dev.netif_stop_queue();
+        _dev.netif_carrier_off();
+        _data.e1000_hw_ops.e1000_reset_hw();
+        _data.napi.disable();
+        Ok(())
+    }
+
+    fn remove(data: &Self::Data) {
+        pr_info!("Rust for linux e1000 driver demo (remove)\n");
+        let bars = data.bars;
+        let pci_dev_ptr = data.pci_dev_ptr;
+
+        unsafe { bindings::pci_release_selected_regions(pci_dev_ptr, bars) };
+        unsafe { bindings::pci_clear_master(pci_dev_ptr) };
+        unsafe { bindings::pci_disable_device(pci_dev_ptr) };
+        data.e1000_hw_ops.as_arc_borrow().e1000_reset_hw();
+        
+    }
+```
+
 ## 作业五
 
 修改配置
